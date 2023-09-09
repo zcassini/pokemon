@@ -3,6 +3,8 @@ import './App.css';
 import React from 'react';
 import { BrowserRouter as Router, Route, Link, Routes } from 'react-router-dom';
 import RandomPokemon from './RandomPokemon';
+import Collection from './Collection';
+import ServerPokemon from './ServerPokemon';
 
 
 function App() {
@@ -11,9 +13,13 @@ function App() {
       <div>
         <nav>
           <Link to="/">Home</Link>
+          <Link to="/collection">Collection</Link>
+          <Link to="/server-pokemon">Server Pokemon</Link>
         </nav>
         <Routes>
-          <Route path="/" element={<RandomPokemon />} />
+          <Route exact path="/" element={<RandomPokemon />} />
+          <Route path="/collection" element={<Collection />} />
+          <Route path="/server-pokemon" element={<ServerPokemon />} />
         </Routes>
       </div>
     </Router>

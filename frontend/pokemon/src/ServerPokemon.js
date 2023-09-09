@@ -1,17 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import axios from 'axios';
 
-function RandomPokemon() {
+function ServerPokemon() {
     const [pokemon, setPokemon] = useState(null);
     const [loading, setLoading] = useState(true);
 
     const fetchRandomPokemon = async () => {
         setLoading(true);
         try {
-            const { data: speciesData } = await axios.get('https://pokeapi.co/api/v2/pokemon-species');
-            const randomId = Math.floor(Math.random() * speciesData.count) + 1;
-            const { data: pokemonData } = await axios.get('https://pokeapi.co/api/v2/pokemon/' + randomId);
-            setPokemon(pokemonData);
+            const response = await axios.get('http://localhost:8080/server-pokemon');
+            // console.log('RESPONSE!!!!: ' + response.data);
+            // console.log(response)
+            setPokemon(response.data);
+            // const { data: speciesData } = await axios.get('https://pokeapi.co/api/v2/pokemon-species');
+            // const randomId = Math.floor(Math.random() * speciesData.count) + 1;
+            // const { data: pokemonData } = await axios.get('https://pokeapi.co/api/v2/pokemon/' + randomId);
         }
         catch (error) {
             console.error('Error fetching random Pokemon:', error);
@@ -24,7 +27,7 @@ function RandomPokemon() {
     const capturePokemon = async () => {
         if (!pokemon) return;
         try {
-            await axios.post('http://localhost:8080/capture', { name: pokemon.name, imageUrl: pokemon.sprites.front_default });
+            await axios.post('http://localhost:8080/capture', { name: pokemon.name, imageUrl: pokemon.imageUrl });
             alert('Pokemon captured!')
         }
         catch (error) {
@@ -42,7 +45,7 @@ function RandomPokemon() {
                 ? ( <p>Loading...</p>)
                 : (
                     <div>
-                        <img src={pokemon.sprites.front_default} alt={pokemon.name} />
+                        <img src={pokemon.imageUrl} alt={pokemon.name} />
                         <p>You encountered a {pokemon.name}!</p>
                         <button onClick={capturePokemon}>Capture Pokemon</button>
                         <button onClick={fetchRandomPokemon}>Get another Pokemon</button>
@@ -51,6 +54,7 @@ function RandomPokemon() {
             }
         </div>
     )
+
 }
 
-export default RandomPokemon;
+export default ServerPokemon;
